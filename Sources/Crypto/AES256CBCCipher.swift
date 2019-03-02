@@ -75,29 +75,28 @@ public final class AES256CBCCipher {
         }
 
         // Output buffer
-        let cipherTextLength = data.count + kCCBlockSizeAES128 // Buffer padding
-        var cipherTextData = Data(count: cipherTextLength)
+        let outputLength = data.count + kCCBlockSizeAES128 // Buffer padding
+        var outputBuffer = Array<UInt8>(repeating: 0, count: outputLength)
         var numBytesEncrypted = 0
 
-        let status = cipherTextData.withUnsafeMutableBytes { cipherTextBytes in
-            CCCrypt(CCOperation(kCCEncrypt),
-                    CCAlgorithm(kCCAlgorithmAES),
-                    CCOptions(kCCOptionPKCS7Padding),
-                    Array(encryptionKey),
-                    kCCKeySizeAES256,
-                    initializationVector,
-                    Array(data),
-                    data.count,
-                    cipherTextBytes,
-                    cipherTextLength,
-                    &numBytesEncrypted)
-        }
+        let status = CCCrypt(CCOperation(kCCEncrypt),
+                             CCAlgorithm(kCCAlgorithmAES),
+                             CCOptions(kCCOptionPKCS7Padding),
+                             Array(encryptionKey),
+                             kCCKeySizeAES256,
+                             initializationVector,
+                             Array(data),
+                             data.count,
+                             &outputBuffer,
+                             outputLength,
+                             &numBytesEncrypted)
+
         guard status == kCCSuccess else {
             throw Error.encryptionError
         }
 
-        cipherTextData.count = numBytesEncrypted
-        return Data(bytes: initializationVector) + cipherTextData
+        let outputBytes = initializationVector + outputBuffer.prefix(numBytesEncrypted)
+        return Data(bytes: outputBytes)
     }
 
     /// AES 256-bit CBC decryption
@@ -121,34 +120,33 @@ public final class AES256CBCCipher {
         }
 
         let cipherTextBytes = Array(cipherData.suffix(from: kCCBlockSizeAES128))
-        guard cipherTextBytes.count >= kCCBlockSizeAES128 else {
+        let cipherTextLength = cipherTextBytes.count
+        guard cipherTextLength >= kCCBlockSizeAES128 else {
             throw Error.decryptionError
         }
 
         // Output buffer
-        let outputLength = cipherTextBytes.count
-        var outputData = Data(count: outputLength)
+        var outputBuffer = Array<UInt8>(repeating: 0, count: cipherTextLength)
         var numBytesDecrypted = 0
 
-        let status = outputData.withUnsafeMutableBytes { outputBytes in
-            CCCrypt(CCOperation(kCCDecrypt),
-                    CCAlgorithm(kCCAlgorithmAES),
-                    CCOptions(kCCOptionPKCS7Padding),
-                    Array(encryptionKey),
-                    kCCKeySizeAES256,
-                    initializationVector,
-                    cipherTextBytes,
-                    outputLength,
-                    outputBytes,
-                    outputLength,
-                    &numBytesDecrypted)
-        }
+        let status = CCCrypt(CCOperation(kCCDecrypt),
+                             CCAlgorithm(kCCAlgorithmAES),
+                             CCOptions(kCCOptionPKCS7Padding),
+                             Array(encryptionKey),
+                             kCCKeySizeAES256,
+                             initializationVector,
+                             cipherTextBytes,
+                             cipherTextLength,
+                             &outputBuffer,
+                             cipherTextLength,
+                             &numBytesDecrypted)
+
         guard status == kCCSuccess else {
             throw Error.decryptionError
         }
 
-        outputData.count = numBytesDecrypted // Discard any padding
-        return outputData
+        let outputBytes = outputBuffer.prefix(numBytesDecrypted) // Discard any padding
+        return Data(bytes: outputBytes)
     }
 
     /// Generate a random 128bit (16 byte) initialization vector
