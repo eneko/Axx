@@ -17,4 +17,10 @@ class CryptoTests: XCTestCase {
         XCTAssertEqual(data, try cipher.decrypt(data: ciphertext))
     }
 
+    func testEncoder() throws {
+        let key = try PBKDF2Derivator().derivateKey(from: "foo", salt: "bar")
+        let encoded = Base64KeyEncoder().encode(key: key)
+        let decoded = try Base64KeyEncoder().parse(key: encoded)
+        XCTAssertEqual(key, decoded)
+    }
 }

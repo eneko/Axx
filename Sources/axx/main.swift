@@ -5,5 +5,6 @@ var program = CommandRegistry(usage: "<command> <options> <files>",
 
 program.register(command: DecryptCommand.self)
 program.register(command: EncryptCommand.self)
+program.register(command: GenerateKeyCommand.self)
 
 program.run()

@@ -32,22 +32,20 @@ public final class PBKDF2Derivator {
     /// - Throws: Exception if key derivation failed
     public func derivateKey(from passphrase: String, salt: String) throws -> Data {
         let rounds = UInt32(45_000)
-        var outputData = Data(count: kCCKeySizeAES256)
+        var outputBytes = Array<UInt8>(repeating: 0, count: kCCKeySizeAES256)
 
-        try outputData.withUnsafeMutableBytes { (outputBytes: UnsafeMutablePointer<UInt8>) in
-            let status = CCKeyDerivationPBKDF(CCPBKDFAlgorithm(kCCPBKDF2),
-                                              passphrase,
-                                              passphrase.utf8.count,
-                                              salt,
-                                              salt.utf8.count,
-                                              CCPseudoRandomAlgorithm(kCCPRFHmacAlgSHA1),
-                                              rounds,
-                                              outputBytes,
-                                              kCCKeySizeAES256)
-            guard status == kCCSuccess else {
-                throw Error.keyDerivationError
-            }
+        let status = CCKeyDerivationPBKDF(CCPBKDFAlgorithm(kCCPBKDF2),
+                                          passphrase,
+                                          passphrase.utf8.count,
+                                          salt,
+                                          salt.utf8.count,
+                                          CCPseudoRandomAlgorithm(kCCPRFHmacAlgSHA1),
+                                          rounds,
+                                          &outputBytes,
+                                          kCCKeySizeAES256)
+        guard status == kCCSuccess else {
+            throw Error.keyDerivationError
         }
-        return outputData
+        return Data(bytes: outputBytes)
     }
 }
