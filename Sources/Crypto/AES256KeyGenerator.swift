@@ -21,6 +21,6 @@ public final class AES256KeyGenerator {
         guard status == errSecSuccess else {
             throw Error.keyGenerationFailed(status: status)
         }
-        return Data(bytes: bytes)
+        return Data(bytes)
     }
 }

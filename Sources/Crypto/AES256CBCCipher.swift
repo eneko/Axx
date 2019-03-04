@@ -96,7 +96,7 @@ public final class AES256CBCCipher {
         }
 
         let outputBytes = initializationVector + outputBuffer.prefix(numBytesEncrypted)
-        return Data(bytes: outputBytes)
+        return Data(outputBytes)
     }
 
     /// AES 256-bit CBC decryption
@@ -146,7 +146,7 @@ public final class AES256CBCCipher {
         }
 
         let outputBytes = outputBuffer.prefix(numBytesDecrypted) // Discard any padding
-        return Data(bytes: outputBytes)
+        return Data(outputBytes)
     }
 
     /// Generate a random 128bit (16 byte) initialization vector

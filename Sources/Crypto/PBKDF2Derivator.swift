@@ -46,6 +46,6 @@ public final class PBKDF2Derivator {
         guard status == kCCSuccess else {
             throw Error.keyDerivationError
         }
-        return Data(bytes: outputBytes)
+        return Data(outputBytes)
     }
 }
