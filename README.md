@@ -4,6 +4,18 @@ Encrypt / decrypt files from the command line.
 
 ![](https://cdn-images-1.medium.com/max/1600/1*xaPn6yEq6H_3TNc7ZZkDew.png)
 
+```
+$ axx
+OVERVIEW: Encrypt/decrypt files from the command line
+
+USAGE: axx <command> <options> <files>
+
+SUBCOMMANDS:
+  d                       Decrypt one or more files
+  e                       Encrypt one or more files
+  k                       Generate new encryption key
+```
+
 ## Key File Generation
 
 ```
