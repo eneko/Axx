@@ -2,30 +2,12 @@
   "object": {
     "pins": [
       {
-        "package": "CommandRegistry",
-        "repositoryURL": "https://github.com/eneko/CommandRegistry.git",
+        "package": "swift-argument-parser",
+        "repositoryURL": "https://github.com/apple/swift-argument-parser",
         "state": {
           "branch": null,
-          "revision": "236d314111dde7f868daa1d1c7254950110466e9",
-          "version": "0.1.0"
-        }
-      },
-      {
-        "package": "Logger",
-        "repositoryURL": "https://github.com/eneko/Logger.git",
-        "state": {
-          "branch": null,
-          "revision": "146a17c68a442859ec409b2ae1a23d1913d48c5d",
-          "version": "0.0.2"
-        }
-      },
-      {
-        "package": "SwiftPM",
-        "repositoryURL": "https://github.com/apple/swift-package-manager.git",
-        "state": {
-          "branch": null,
-          "revision": "235aacc514cb81a6881364b0fedcb3dd083228f3",
-          "version": "0.3.0"
+          "revision": "986d191f94cec88f6350056da59c2e59e83d1229",
+          "version": "0.4.3"
         }
       }
     ]

@@ -1,10 +1,13 @@
-import CommandRegistry
+import ArgumentParser
 
-var program = CommandRegistry(usage: "<command> <options> <files>",
-                              overview: "Encrypt/decrypt files from the command line")
+/// `axx` is the main command or program executable
+struct Axx: ParsableCommand {
+    static var configuration = CommandConfiguration(
+        abstract: "Easily encrypt/decrypt files from the command line",
+        version: "0.1.0",
+        subcommands: [GenerateKey.self, Encrypt.self, Decrypt.self],
+        defaultSubcommand: nil
+    )
+}
 
-program.register(command: DecryptCommand.self)
-program.register(command: EncryptCommand.self)
-program.register(command: GenerateKeyCommand.self)
-
-program.run()
+Axx.main()
