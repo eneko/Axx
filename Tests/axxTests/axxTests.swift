@@ -2,20 +2,33 @@ import XCTest
 import class Foundation.Bundle
 
 final class axxTests: XCTestCase {
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
 
+    func testHelp() throws {
+        let output = try axx(with: [])
+        XCTAssertTrue(output.hasPrefix("OVERVIEW: Easily encrypt/decrypt files from the command line"))
+    }
+
+    func testEncryptDecrypt() throws {
+        let input = "I 🧡 Swift"
+        try input.write(toFile: "input.txt", atomically: true, encoding: .utf8)
+        try axx(with: ["e", "-p", "secret password", "input.txt"])
+        try axx(with: ["d", "-p", "secret password", "input.txt.enc"])
+        let output = try String(contentsOfFile: "input.txt.enc.plain")
+        XCTAssertEqual(input, output)
+    }
+
+    @discardableResult
+    func axx(with arguments: [String]) throws -> String {
         // Some of the APIs that we use below are available in macOS 10.13 and above.
         guard #available(macOS 10.13, *) else {
-            return
+            return ""
         }
 
         let fooBinary = productsDirectory.appendingPathComponent("axx")
 
         let process = Process()
         process.executableURL = fooBinary
+        process.arguments = arguments
 
         let pipe = Pipe()
         process.standardOutput = pipe
@@ -25,8 +38,7 @@ final class axxTests: XCTestCase {
 
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let output = String(data: data, encoding: .utf8)
-
-        XCTAssertEqual(output, "Hello, world!\n")
+        return output ?? ""
     }
 
     /// Returns path to the built products directory.

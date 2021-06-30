@@ -6,18 +6,27 @@ Encrypt / decrypt files from the command line.
 
 ```
 $ axx
-OVERVIEW: Encrypt/decrypt files from the command line
+OVERVIEW: Easily encrypt/decrypt files from the command line
 
-USAGE: axx <command> <options> <files>
+USAGE: axx <subcommand>
+
+OPTIONS:
+  --version               Show the version.
+  -h, --help              Show help information.
 
 SUBCOMMANDS:
-  d                       Decrypt one or more files
+  k                       Generate an encryption key
   e                       Encrypt one or more files
-  k                       Generate new encryption key
+  d                       Decrypt one or more files
+
+  See 'axx help <subcommand>' for detailed help.
 ```
 
-## Key File Generation
+## Usage
 
+### Key Generation
+
+With Axx is very easy to generate AES 256 encryption keys.
 ```
 $ axx k > ~/.mykey.pem
 ```
@@ -26,15 +35,42 @@ $ axx k > ~/.mykey.pem
 
 ### File Encryption
 
+Axx supports file encryption with key, passphrase, or passphrase + salt.
+
+With key:
 ```
 $ axx e -i ~/.mykey.pem secretstuff.txt
 ```
 
+With passphrase:
+```
+$ axx e -p pass secretstuff.txt
+```
+
+With passphrase and salt:
+```
+$ axx e -p pass -s sugar secretstuff.txt
+```
+
 ### File Decryption
 
+Axx supports file decryption with key, passphrase, or passphrase + salt.
+
+With key:
 ```
 $ axx d -i ~/.mykey.pem secretstuff.txt.enc
 ```
+
+With passphrase:
+```
+$ axx d -p pass secretstuff.txt.enc
+```
+
+With passphrase and salt:
+```
+$ axx d -p pass -s sugar secretstuff.txt.enc
+```
+
 
 ## Installation
 
