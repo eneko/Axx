@@ -1,6 +1,6 @@
 
 TOOL_NAME = axx
-VERSION = 0.0.2
+VERSION = 0.1.0
 
 PREFIX = /usr/local
 INSTALL_PATH = $(PREFIX)/bin/$(TOOL_NAME)
