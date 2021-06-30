@@ -1,12 +1,12 @@
 //
-//  CryptoTests.swift
+//  AxxCryptoTests.swift
 //  axx
 //
 //  Created by Eneko Alonso on 3/1/19.
 //
 
 import XCTest
-import Crypto
+import AxxCrypto
 
 class CryptoTests: XCTestCase {
 
